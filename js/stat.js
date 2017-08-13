@@ -46,8 +46,8 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.textBaseline = 'top';
 
   for (i = 0; i < times.length; i++) {
-    ctx.fillStyle = names[i] == 'Вы' ? 'rgba(255, 0, 0, 1)' :
-    'hsl(240, ' + getRandomSatur() + '%, 50%)';// нашел способ подставлени
+    ctx.fillStyle = names[i] === 'Вы' ? 'rgba(255, 0, 0, 1)' :
+      'hsl(240, ' + getRandomSatur() + '%, 50%)';// нашел способ подставлени
     // переменных или функций в hsl, но не понятно зачем плюсы по сторонам ' + getRandomSatur() + '%
     var barHeight = times[i] * step;
     ctx.fillRect(
@@ -61,7 +61,7 @@ window.renderStatistics = function (ctx, names, times) {
         initialX + ((barWidth + indent) * i),
         nameInitialY);
     ctx.fillText(
-        parseInt(times[i]),
+        parseInt(times[i], 10),
         initialX + ((barWidth + indent) * i),
         timeInitialY + histogramHeight - barHeight);
   }
