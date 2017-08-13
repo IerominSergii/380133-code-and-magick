@@ -17,20 +17,18 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillText('Список результатов:', 120, 60);
 
   var max = -1;
-  var maxIndex = -1;
 
   // нахожу худшее время
   for (var i = 0; i < times.length; i++) {
     var time = times[i];
     if (time > max) {
       max = time;
-      maxIndex = i;
     }
   }
 
   var histogramHeight = 150;
   var step = histogramHeight / (max - 0); // [?] не понял зачем
-  //в лекции использовали (max - 0). 0 - это минимум?
+  // в лекции использовали (max - 0). 0 - это минимум?
 
   // объявляю функцию, которая возвращает случайное значение
   // Полученное значение будем подставлять в значение s формата цвета hsl для изменения насыщенности
@@ -49,22 +47,22 @@ window.renderStatistics = function (ctx, names, times) {
 
   for (i = 0; i < times.length; i++) {
     ctx.fillStyle = names[i] == 'Вы' ? 'rgba(255, 0, 0, 1)' :
-    'hsl(240, ' + getRandomSatur() + '%, 50%)';//нашел способ подставления
-    //переменных или функций в hsl, но не понятно зачем плюсы по сторонам ' + getRandomSatur() + '%
+    'hsl(240, ' + getRandomSatur() + '%, 50%)';// нашел способ подставлени
+    // переменных или функций в hsl, но не понятно зачем плюсы по сторонам ' + getRandomSatur() + '%
     var barHeight = times[i] * step;
     ctx.fillRect(
-       initialX + ((barWidth + indent) * i),
-       initialY + histogramHeight - barHeight,
-       barWidth,
-       times[i] * step);
+        initialX + ((barWidth + indent) * i),
+        initialY + histogramHeight - barHeight,
+        barWidth,
+        times[i] * step);
     ctx.fillStyle = '#000';
     ctx.fillText(
-      names[i],
-      initialX + ((barWidth + indent) * i),
-      nameInitialY);
+        names[i],
+        initialX + ((barWidth + indent) * i),
+        nameInitialY);
     ctx.fillText(
-      parseInt(times[i]),
-      initialX + ((barWidth + indent) * i),
-      timeInitialY + histogramHeight - barHeight);
+        parseInt(times[i]),
+        initialX + ((barWidth + indent) * i),
+        timeInitialY + histogramHeight - barHeight);
   }
 };
