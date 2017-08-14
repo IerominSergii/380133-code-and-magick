@@ -46,9 +46,12 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.textBaseline = 'top';
 
   for (i = 0; i < times.length; i++) {
-    ctx.fillStyle = names[i] === 'Вы' ? 'rgba(255, 0, 0, 1)' :
-      'hsl(240, ' + getRandomSatur() + '%, 50%)';// нашел способ подставлени
-    // переменных или функций в hsl, но не понятно зачем плюсы по сторонам ' + getRandomSatur() + '%
+    if (names[i] === 'Вы') {
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+    } else {
+      ctx.fillStyle = 'hsl(240, ' + getRandomSatur() + '%, 50%)';
+    }
+
     var barHeight = times[i] * step;
     ctx.fillRect(
         initialX + ((barWidth + indent) * i),
