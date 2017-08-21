@@ -10,7 +10,8 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template');
 var wizardNames = [
   'Иван',
   'Хуан Себастьян',
-  'Мария, Кристоф',
+  'Мария',
+  'Кристоф',
   'Виктор',
   'Юлия',
   'Люпита',
@@ -28,7 +29,7 @@ var wizardSecondNames = [
   'Ирвинг',
 ];
 
-var coatColor = [
+var coatsColor = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
   'rgb(146, 100, 161)',
@@ -46,52 +47,49 @@ var eyesColor = [
 ];
 
 var totalWizards = 4;// Количество магов
-var wizards = [];
 
 // функция генерации случайных данных в зависимости от длины массива
-var randomProperty = function (arr) {
-  var rand = Math.random() * arr.length;
-  rand = Math.floor(rand);
-  return rand;
+// max - это значение свойства length массива
+var randomProperty = function (max) {
+  return Math.floor(1 + Math.random() * max);
 };
 
-// функция создания объекта со случайными значениями свойств
-var createWizard = function () {
-  var nameIndex1 = randomProperty(wizardNames);
-  var nameIndex2 = randomProperty(wizardSecondNames);
-  var coatIndex = randomProperty(coatColor);
-  var eyeIndex = randomProperty(eyesColor);
-  var object = {};
-
-  if (Math.round(Math.random())) {
-    object.name = wizardNames[nameIndex1] + ' ' + wizardSecondNames[nameIndex2];
-  } else {
-    object.name = wizardSecondNames[nameIndex2] + ' ' + wizardNames[nameIndex1];
-  }
-
-  object.coatColor = coatColor[coatIndex];
-  object.eyesColor = eyesColor[eyeIndex];
-
-  return object;
-};
-
-// функция добавления объектов в массив
-var addWizardToArr = function (total, array) {
+// функция создания объектов со случайными значениями свойств
+// и добавлением их в массив
+var getWizards = function (total) {
+  var array = [];
   for (var i = 0; i < total; i++) {
-    array.push(createWizard());
+
+    var nameIndex1 = randomProperty(wizardNames.length);
+    var nameIndex2 = randomProperty(wizardSecondNames.length);
+    var coatIndex = randomProperty(coatsColor.length);
+    var eyeIndex = randomProperty(eyesColor.length);
+    var object = {};
+
+    if (Math.round(Math.random())) {
+      object.name = wizardNames[nameIndex1] + ' ' + wizardSecondNames[nameIndex2];
+    } else {
+      object.name = wizardSecondNames[nameIndex2] + ' ' + wizardNames[nameIndex1];
+    }
+
+    object.coatsColor = coatsColor[coatIndex];
+    object.eyesColor = eyesColor[eyeIndex];
+
+    array.push(object);
   }
 
   return array;
 };
 
 // функция создания DOM-элемента на основе JS-объекта
-addWizardToArr(totalWizards, wizards);
+var wizards = getWizards(totalWizards);
 
 var renderWizard = function (wizard) {
   var wizardElement = similarWizardTemplate.content.cloneNode(true);
 
   wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatsColor;
+  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
 
   return wizardElement;
 };
