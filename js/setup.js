@@ -51,7 +51,7 @@ var totalWizards = 4;// Количество магов
 // функция генерации случайных данных в зависимости от длины массива
 // max - это значение свойства length массива
 var randomProperty = function (max) {
-  return Math.floor(1 + Math.random() * max);
+  return Math.floor(Math.random() * max);
 };
 
 // функция создания объектов со случайными значениями свойств
