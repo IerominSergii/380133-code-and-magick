@@ -180,3 +180,37 @@ submitButton.addEventListener('keydown', function (evt) {
   evt.preventDefault();
   pressEnterToClosePopup(evt);
 });
+
+// Задачи 3-5
+// 3. Изменение цвета мантии персонажа по нажатию
+// 4. Изменение цвета глаз персонажа по нажатию
+// 5. Изменение цвета фаерболов по нажатию
+var wizardCoat = document.querySelector('.wizard-coat');// мантия персонажа
+var wizardEyes = setup.querySelector('.wizard-eyes');// глаза персонажа
+var setupFireball = setup.querySelector('.setup-fireball-wrap');// файербол
+// цвета файербола
+var fireballColors = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848',
+];
+
+// 3. Изменение цвета мантии персонажа в диалог окне по клику на мантию
+wizardCoat.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  wizardCoat.style.fill = coatsColor[randomProperty(coatsColor.length)];
+});
+
+// 4. Изменение цвета глаз персонажа по нажатию
+wizardEyes.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  wizardEyes.style.fill = eyesColor[randomProperty(eyesColor.length)];
+});
+
+// 5. Изменение цвета фаерболов по нажатию
+setupFireball.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  setupFireball.style.background = fireballColors[randomProperty(fireballColors.length)];
+});

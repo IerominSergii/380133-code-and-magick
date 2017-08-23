@@ -76,7 +76,16 @@
           <input type="file" name="avatar">
         </div>
         <label>
-          <input type="text" name="username" class="setup-user-name" value="Синий Пендальф"/>
+          <input
+            type="text"
+            name="username"
+            maxlength="50"
+            class="setup-user-name"
+            method="post"
+            enctype="multipart/form-data"
+            action="https://1510.dump.academy/code-and-magick"
+            value="Синий Пендальф"
+            required/>
         </label>
       </div>
 
