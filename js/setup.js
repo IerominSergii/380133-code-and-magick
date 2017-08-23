@@ -1,3 +1,4 @@
+// Начата работа над module4-task1 #10 Учебный проект: одеть Надежду
 'use strict';
 
 var userDialog = document.querySelector('.setup');
