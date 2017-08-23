@@ -106,3 +106,77 @@ similarListElement.appendChild(fragment);
 
 // показываю блок .setup-similar
 userDialog.querySelector('.setup-similar').classList.remove('hidden');
+
+// Открытие/закрытие окна настройки персонажа
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+var setupOpen = document.querySelector('.setup-open'); // иконка пользователя
+var setup = document.querySelector('.setup'); // окна настройки персонажа
+var setupClose = setup.querySelector('.setup-close'); // крестик закрытия диалог окна
+var submitButton = setup.querySelector('.setup-submit'); // кнопкa Сохранить
+var setupUserName = setup.querySelector('input.setup-user-name'); // форма ввода имени
+
+// функция закрытия диалог окна при нажатии кнопки ESC
+var onPopupEscPress = function (evt) {
+  // Если фокус находится на форме ввода имени,
+  // то при нажатии кнопки ESC диалог окно не закрывается
+  if (evt.keyCode === ESC_KEYCODE && evt.target !== setupUserName) {
+    closePopup();
+  }
+};
+
+// функция закрытия диалог окна при нажатии кнопки ENTER
+var pressEnterToClosePopup = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+};
+
+// функция открытия диалог окна и добавление обработчика нажатия клавиши
+var openPopup = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+// функция закрытия диалог окна и удаления обработчика нажатия клавиши
+var closePopup = function () {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+// Диалоговое окно .setup открывается по нажатию на иконку пользователя .setup-open
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+
+// Когда иконка пользователя .setup-open-icon в фокусе tabindex,
+// то диалог настройки открывается по нажатию кнопки ENTER
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+});
+
+// Диалог окно .setup закрывается по нажатию на элемент .setup-close, расположенный внутри окна
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+// Если диалог открыт и фокус находится на крестике,
+// то нажатие клавиши ENTER приводит к закрытию диалога
+setupClose.addEventListener('keydown', function (evt) {
+  pressEnterToClosePopup(evt);
+});
+
+// Если диалог открыт, нажатие на кнопку «Сохранить» приводит к закрытию диалога
+submitButton.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  closePopup();
+});
+
+// Если диалог открыт и фокус находится на кнопке «Сохранить»,
+// нажатие на ENTER приводит к закрытию диалога
+submitButton.addEventListener('keydown', function (evt) {
+  evt.preventDefault();
+  pressEnterToClosePopup(evt);
+});
