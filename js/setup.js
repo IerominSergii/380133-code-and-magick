@@ -1,8 +1,6 @@
-// Начата работа над module4-task1 #10 Учебный проект: одеть Надежду
 'use strict';
 
 var userDialog = document.querySelector('.setup');
-userDialog.classList.remove('hidden');
 
 var similarListElement = userDialog.querySelector('.setup-similar-list');
 
