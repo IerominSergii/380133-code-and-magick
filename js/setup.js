@@ -114,6 +114,12 @@ var setupClose = setup.querySelector('.setup-close'); // крестик закр
 var submitButton = setup.querySelector('.setup-submit'); // кнопкa Сохранить
 var setupUserName = setup.querySelector('input.setup-user-name'); // форма ввода имени
 
+// изначальные координаты диалог окна
+var initCoords = {
+  x: null,
+  y: null,
+};
+
 // функция закрытия диалог окна при нажатии кнопки ESC
 var onPopupEscPress = function (evt) {
   // Если фокус находится на форме ввода имени,
@@ -134,12 +140,22 @@ var pressEnterToClosePopup = function (evt) {
 var openPopup = function () {
   setup.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscPress);
+
+  // сохранение исходный координат диалог окна в объект initCoords
+  if (initCoords.x === null && initCoords.y === null) {
+    initCoords.x = setup.offsetTop;
+    initCoords.y = setup.offsetLeft;
+  }
 };
 
 // функция закрытия диалог окна и удаления обработчика нажатия клавиши
+// при закрытии диалог окна его координаты возвращаются к исходным
 var closePopup = function () {
   setup.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscPress);
+
+  // возврат к исходным координатам диалог окна
+  setup.style.cssText = 'top: ' + initCoords.x + 'px; left: ' + initCoords.y + 'px';
 };
 
 // Диалоговое окно .setup открывается по нажатию на иконку пользователя .setup-open
@@ -211,4 +227,128 @@ wizardEyes.addEventListener('click', function (evt) {
 setupFireball.addEventListener('click', function (evt) {
   evt.preventDefault();
   setupFireball.style.background = fireballColors[randomProperty(fireballColors.length)];
+});
+
+// Move the setup window
+var dialogHandle = setup.querySelector('.setup-user-pic');
+var avatarInput = setup.querySelector('.upload input');
+
+var moveElement = function (evt, elem) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY,
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY,
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY,
+    };
+
+    elem.style.top = (elem.offsetTop - shift.y) + 'px';
+    elem.style.left = (elem.offsetLeft - shift.x) + 'px';
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
+
+avatarInput.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  moveElement(evt, setup);
+});
+
+// input 'avatarInput' disabled temporary
+avatarInput.addEventListener('click', function (upEvt) {
+  upEvt.preventDefault();
+});
+
+dialogHandle.addEventListener('mousedown', function (evt) {
+  moveElement(evt, setup);
+});
+
+// Drag and Drop section
+// Drag and Drop Artifacts
+var shopElement = document.querySelector('.setup-artifacts-shop');
+var draggedItem = null;
+
+var artifactsElement = document.querySelector('.setup-artifacts');
+
+shopElement.addEventListener('dragstart', function (evt) {
+  if (evt.target.tagName.toLowerCase() === 'img') {
+    draggedItem = evt.target.cloneNode(true);
+    evt.dataTransfer.setData('text/plain', evt.target.alt);
+
+    // draggedItem.style.transform = 'scale(2)';
+    artifactsElement.style.outlineWidth = '2px';
+    artifactsElement.style.outlineStyle = 'dashed';
+    artifactsElement.style.outlineColor = 'red';
+  }
+});
+
+shopElement.addEventListener('dragend', function () {
+  draggedItem.style.transform = 'scale(1)';
+  artifactsElement.style.outlineWidth = '';
+  artifactsElement.style.outlineStyle = '';
+  artifactsElement.style.outlineColor = '';
+});
+
+artifactsElement.addEventListener('dragover', function (evt) {
+  evt.preventDefault();
+  return false;
+});
+
+artifactsElement.addEventListener('drop', function (evt) {
+  evt.target.style.backgroundColor = '';
+  var targetClick = evt.target;
+
+  // ограничиваю всплытие блоком artifactsElement
+  while (targetClick !== artifactsElement) {
+
+    // если нахожу нужный элемент setup-artifacts-cell, то выполняю функцию
+    if (targetClick.classList.contains('setup-artifacts-cell')) {
+
+      // если ячейка пуста, то добавляю артифакт в эту ячейку
+      if (targetClick.children.length < 1) {
+        targetClick.appendChild(draggedItem);
+      }
+
+      break;
+    }
+
+    // поднимаюсь выше к родителю, чтоб проверить не содержит ли он setup-artifacts-cell
+    targetClick = targetClick.parentElement;
+  }
+
+  draggedItem.style.transform = 'scale(1)';
+  artifactsElement.style.outlineWidth = '';
+  artifactsElement.style.outlineStyle = '';
+  artifactsElement.style.outlineColor = '';
+  evt.preventDefault();
+});
+
+artifactsElement.addEventListener('dragenter', function (evt) {
+  evt.target.style.backgroundColor = 'yellow';
+  evt.preventDefault();
+});
+
+artifactsElement.addEventListener('dragleave', function (evt) {
+  evt.target.style.backgroundColor = '';
+  evt.preventDefault();
 });
